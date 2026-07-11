@@ -41,8 +41,41 @@ public abstract record JsonValue
         public override string ToString() => Raw;
     }
 
-    // TODO: JsonObject
-    
+    public sealed record JsonObject
+    {
+        public ImmutableDictionary<JsonString, JsonValue> Fields { get; }
+
+        // Protects against null dictionary.
+        public JsonObject(ImmutableDictionary<JsonString, JsonValue> fields) => Fields = fields is null ? [] : fields;
+
+        // Ensure it is based on field's keys and values, and not field order.
+        public bool Equals(JsonObject? other)
+        {
+            if (other is null || Fields.Count != other.Fields.Count)
+                return false;
+
+            foreach (var field in Fields)
+            {
+                if (!other.Fields.TryGetValue(field.Key, out var value) || value != field.Value)
+                    return false;
+            }
+
+            return true;
+        }
+
+        // Ensure it is based on field's keys and values, and not field order.
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            foreach (var field in Fields)
+            {
+                hash.Add(field.Key);
+                hash.Add(field.Value);
+            }
+            return hash.ToHashCode();
+        }
+    }
+
     public sealed record JsonArray
     {
         public ImmutableArray<JsonValue> Items { get; }

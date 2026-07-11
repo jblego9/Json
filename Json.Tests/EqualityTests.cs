@@ -1,5 +1,13 @@
-﻿namespace Json.Tests;
+﻿using System.Collections.Immutable;
 
+namespace Json.Tests;
+
+/// <summary>
+/// Not the most thorough.
+/// <para>Ensures equality based on values and not object references.</para>
+/// <para>Ensures item order sensitivity for <see cref="JsonValue.JsonArray"/> and field order insensitivity for <see cref="JsonValue.JsonObject"/></para>
+/// <para>Ensures number equality regardless of asXXXX or tryGetXXXX methods for <see cref="JsonValue.JsonNumber"/></para>
+/// </summary>
 [TestClass]
 [TestCategory("Equality")]
 public sealed class EqualityTests
@@ -76,6 +84,57 @@ public sealed class EqualityTests
         
         // Should be equal regardless of asXXXX or tryGetXXXX.
         Assert.AreEqual(asInt64, tryGetInt64);
+    }
+
+    [TestMethod]
+    public void JsonObjectEqualityTest()
+    {
+        var a = new JsonValue.JsonObject(
+            ImmutableDictionary.CreateRange<JsonValue.JsonString, JsonValue>([
+                new(
+                    new JsonValue.JsonString("health"),
+                    new JsonValue.JsonNumber("100")
+                ),
+                new(
+                    new JsonValue.JsonString("ammo"),
+                    new JsonValue.JsonNumber("22")
+                )
+            ])
+        );
+
+        var b = new JsonValue.JsonObject(
+            ImmutableDictionary.CreateRange<JsonValue.JsonString, JsonValue>([
+                new(
+                    new JsonValue.JsonString("health"),
+                    new JsonValue.JsonNumber("100")
+                ),
+                new(
+                    new JsonValue.JsonString("ammo"),
+                    new JsonValue.JsonNumber("22")
+                )
+            ])
+        );
+
+        // Ensure equality is based on fields keys and values, and not object reference.
+        Assert.AreEqual(a, b);
+        Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
+
+        var c = new JsonValue.JsonObject(
+            ImmutableDictionary.CreateRange<JsonValue.JsonString, JsonValue>([
+                new(
+                    new JsonValue.JsonString("ammo"),
+                    new JsonValue.JsonNumber("22")
+                ),
+                new(
+                    new JsonValue.JsonString("health"),
+                    new JsonValue.JsonNumber("100")
+                )
+            ])
+        );
+
+        // Field order should not impact equality.
+        Assert.AreEqual(a, c);
+        Assert.AreEqual(a.GetHashCode(), c.GetHashCode());
     }
 
     [TestMethod]
