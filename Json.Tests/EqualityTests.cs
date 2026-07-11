@@ -79,6 +79,35 @@ public sealed class EqualityTests
     }
 
     [TestMethod]
+    public void JsonArrayEqualityTest()
+    {
+        var a = new JsonValue.JsonArray([
+            new JsonValue.JsonNumber("1"),
+            new JsonValue.JsonNumber("2"),
+            new JsonValue.JsonNumber("3"),
+        ]);
+        var b = new JsonValue.JsonArray([
+            new JsonValue.JsonNumber("1"),
+            new JsonValue.JsonNumber("2"),
+            new JsonValue.JsonNumber("3"),
+        ]);
+
+        // Equality should be based on the sequence of items and not object reference.
+        Assert.AreEqual(a, b);
+        Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
+
+        var c = new JsonValue.JsonArray([
+            new JsonValue.JsonNumber("1"),
+            new JsonValue.JsonNumber("3"),
+            new JsonValue.JsonNumber("2"),
+        ]);
+
+        // Item sequence should impact equality.
+        Assert.AreNotEqual(b, c);
+        Assert.AreNotEqual(b.GetHashCode(), c.GetHashCode());
+    }
+
+    [TestMethod]
     public void JsonBooleanEqualityTest()
     {
         var a = new JsonValue.JsonBoolean(true);

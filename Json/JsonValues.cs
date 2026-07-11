@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Globalization;
 
 namespace Json;
@@ -41,7 +42,25 @@ public abstract record JsonValue
     }
 
     // TODO: JsonObject
-    // TODO: JsonArray
+    
+    public sealed record JsonArray
+    {
+        public ImmutableArray<JsonValue> Items { get; }
+
+        // Protects against default/uninitialised arary.
+        public JsonArray(ImmutableArray<JsonValue> items) => Items = items.IsDefault ? [] : items;
+
+        // Ensure it is based on the array's sequence of items.
+        public bool Equals(JsonArray? other) => other is not null && Items.SequenceEqual(other.Items);
+        
+        // Ensure it is based on the array's sequence of items.
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            foreach (var item in Items) hash.Add(item);
+            return hash.ToHashCode();
+        }
+    }
 
     public sealed record JsonBoolean(bool Value) : JsonValue;
     public sealed record JsonNull : JsonValue;
