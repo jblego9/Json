@@ -24,14 +24,14 @@ public class JsonLexer
     {
         while (!IsFinished())
         {
-            switch (At())
+            char c = At();
+            switch (c)
             {
                 case '"': HandleString(); break;
                 default: {
-                    if (char.IsWhiteSpace(At()))
-                        SkipWhitespace();
-                    else
-                        throw new FormatException($"Unexpected character '{At()}' at position: {position}");
+                    if (char.IsWhiteSpace(c)) SkipWhitespace();
+                    else if (char.IsLetter(c)) HandleLiteral();
+                    else throw new FormatException($"Unexpected character '{c}' at position: {position}");
 
                     break;
                 }
@@ -84,5 +84,37 @@ public class JsonLexer
         }
 
         throw new FormatException($"Unterminated string \"{value}\" at position: {position}");
+    }
+
+    private void HandleLiteral()
+    {
+        string value = "" + At();
+        Advance();
+
+        while (!IsFinished())
+        {
+            char c = At();
+
+            if (!char.IsLetter(c)) break;
+
+            value += c;
+            Advance();
+        }
+
+        if (value == "true")
+        {
+            Push(JsonTokenKind.True, "true");
+            return;
+        } else if (value == "false")
+        {
+            Push(JsonTokenKind.False, "false");
+            return;
+        } else if (value == "null")
+        {
+            Push(JsonTokenKind.Null, "null");
+            return;
+        }
+
+        throw new FormatException($"Invalid literal \"{value}\" at position: {position}");
     }
 }

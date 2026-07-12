@@ -2,5 +2,8 @@ namespace Json;
 
 public enum JsonTokenKind
 {
-    String
+    String,
+    True,
+    False,
+    Null
 }

@@ -1,9 +1,6 @@
 # TODO
-- Parse value (rough order)
-    - Parse true
-    - Parse false
-    - Parse null
+- Tokenise value (rough order)
     - Handle escape sequences in strings
-    - Parse number
-    - Parse array
-    - Parse object
+    - Tokenise number
+    - Tokenise array
+    - Tokenise object
