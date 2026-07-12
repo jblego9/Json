@@ -9,8 +9,8 @@ namespace Json.Tests;
 /// <para>Ensures number equality regardless of asXXXX or tryGetXXXX methods for <see cref="JsonValue.JsonNumber"/></para>
 /// </summary>
 [TestClass]
-[TestCategory("Equality")]
-public sealed class EqualityTests
+[TestCategory("ValueEquality")]
+public sealed class ValueEqualityTests
 {
     [TestMethod]
     public void JsonStringEqualityTest()
