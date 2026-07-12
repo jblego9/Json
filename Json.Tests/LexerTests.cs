@@ -7,22 +7,15 @@ public sealed class LexerTests
     [TestMethod]
     public void UnexpectedCharacterTest()
     {
-        string sourceA = "(5 + 10) * 2.5";
-        Assert.Throws<FormatException>(() => JsonLexer.Tokenise(sourceA));
-
-        string sourceB = "Hello world!";
-        Assert.Throws<FormatException>(() => JsonLexer.Tokenise(sourceB));
-
-        string sourceC = "true false null \"apples\" ?";
-        Assert.Throws<FormatException>(() => JsonLexer.Tokenise(sourceC));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("(5 + 10) * 2.5"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("Hello world!"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("true false null \"apples\" ?"));
     }
 
     [TestMethod]
     public void ValidStringTest()
     {
-        string source = " \t\n  \"Apples\"    \r\n    ";
-        var tokens = JsonLexer.Tokenise(source);
-
+        var tokens = JsonLexer.Tokenise(" \t\n  \"Apples\"    \r\n    ");
         Assert.HasCount(1, tokens);
         Assert.AreEqual(JsonTokenKind.String, tokens[0].Kind);
 
@@ -34,17 +27,13 @@ public sealed class LexerTests
     [TestMethod]
     public void UnterminatedStringTest()
     {
-        string source = "\"Apples";
-        Assert.Throws<FormatException>(() =>JsonLexer.Tokenise(source));
-        Assert.Throws<FormatException>(() =>JsonLexer.Tokenise(source));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("\"Apples"));
     }
 
     [TestMethod]
     public void ValidLiteralTest()
     {
-        string sourceA = "  \t\t\t    true          \r\n";
-        var tokensA = JsonLexer.Tokenise(sourceA);
-
+        var tokensA = JsonLexer.Tokenise("  \t\t\t    true          \r\n");
         Assert.HasCount(1, tokensA);
         Assert.AreEqual(JsonTokenKind.True, tokensA[0].Kind);
 
@@ -52,9 +41,7 @@ public sealed class LexerTests
         Assert.AreEqual("true", tokensA[0].Value);
 
 
-        string sourceB = "  \t \r    false   \n\n";
-        var tokensB = JsonLexer.Tokenise(sourceB);
-
+        var tokensB = JsonLexer.Tokenise("  \t \r    false   \n\n");
         Assert.HasCount(1, tokensB);
         Assert.AreEqual(JsonTokenKind.False, tokensB[0].Kind);
 
@@ -62,9 +49,7 @@ public sealed class LexerTests
         Assert.AreEqual("false", tokensB[0].Value);
 
 
-        string sourceC = "null";
-        var tokensC = JsonLexer.Tokenise(sourceC);
-
+        var tokensC = JsonLexer.Tokenise("null");
         Assert.HasCount(1, tokensC);
         Assert.AreEqual(JsonTokenKind.Null, tokensC[0].Kind);
         Assert.AreEqual("null", tokensC[0].Value);
@@ -73,13 +58,8 @@ public sealed class LexerTests
     [TestMethod]
     public void InvalidLiteralTest()
     {
-        string sourceA = "trUE";
-        Assert.Throws<FormatException>(() =>JsonLexer.Tokenise(sourceA));
-
-        string sourceB = "FaLsE";
-        Assert.Throws<FormatException>(() =>JsonLexer.Tokenise(sourceB));
-
-        string sourceC = "nullable";
-        Assert.Throws<FormatException>(() =>JsonLexer.Tokenise(sourceC));
+        Assert.Throws<FormatException>(() =>JsonLexer.Tokenise("trUE"));
+        Assert.Throws<FormatException>(() =>JsonLexer.Tokenise("FaLsE"));
+        Assert.Throws<FormatException>(() =>JsonLexer.Tokenise("nullable"));
     }
 }

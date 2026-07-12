@@ -31,11 +31,10 @@ public sealed class ValueEqualityTests
         // Equality should be based on internal string value and not object reference.
         Assert.AreEqual(a, b);
 
-        var asDouble = a.AsDouble();
         Assert.IsTrue(a.TryGetDouble(out var tryGetDouble));
         
         // Should be equal regardless of asXXXX or tryGetXXXX.
-        Assert.AreEqual(asDouble, tryGetDouble);
+        Assert.AreEqual(a.AsDouble(), tryGetDouble);
     }
 
     [TestMethod]
@@ -47,11 +46,10 @@ public sealed class ValueEqualityTests
         // Equality should be based on internal string value and not object reference.
         Assert.AreEqual(a, b);
 
-        var asDecimal = a.AsDecimal();
         Assert.IsTrue(a.TryGetDecimal(out var tryGetDecimal));
         
         // Should be equal regardless of asXXXX or tryGetXXXX.
-        Assert.AreEqual(asDecimal, tryGetDecimal);
+        Assert.AreEqual(a.AsDecimal(), tryGetDecimal);
     }
 
     [TestMethod]
@@ -63,11 +61,10 @@ public sealed class ValueEqualityTests
         // Equality should be based on internal string value and not object reference.
         Assert.AreEqual(a, b);
 
-        var asInt32 = a.AsInt32();
         Assert.IsTrue(a.TryGetInt32(out var tryGetInt32));
         
         // Should be equal regardless of asXXXX or tryGetXXXX.
-        Assert.AreEqual(asInt32, tryGetInt32);
+        Assert.AreEqual(a.AsInt32(), tryGetInt32);
     }
 
     [TestMethod]
@@ -79,11 +76,10 @@ public sealed class ValueEqualityTests
         // Equality should be based on internal string value and not object reference.
         Assert.AreEqual(a, b);
 
-        var asInt64 = a.AsInt64();
         Assert.IsTrue(a.TryGetInt64(out var tryGetInt64));
         
         // Should be equal regardless of asXXXX or tryGetXXXX.
-        Assert.AreEqual(asInt64, tryGetInt64);
+        Assert.AreEqual(a.AsInt64(), tryGetInt64);
     }
 
     [TestMethod]
