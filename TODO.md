@@ -1,7 +1,6 @@
 # TODO
 - Lexing
     - Tokenise value (rough order)
-        - Tokenise number
         - Tokenise array
         - Tokenise object
 - Tests

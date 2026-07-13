@@ -49,6 +49,106 @@ public sealed class LexerTests
     }
 
     [TestMethod]
+    public void PositiveIntegerNumberTest()
+    {
+        var tokens = JsonLexer.Tokenise("500");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.Number, tokens[0].Kind);
+        Assert.AreEqual("500", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void NegativeIntegerNumberTest()
+    {
+        var tokens = JsonLexer.Tokenise("-500");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.Number, tokens[0].Kind);
+        Assert.AreEqual("-500", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void PositiveWithFractionNumberTest()
+    {
+        var tokens = JsonLexer.Tokenise("2.5");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.Number, tokens[0].Kind);
+        Assert.AreEqual("2.5", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void NegativeWithFractionNumberTest()
+    {
+        var tokens = JsonLexer.Tokenise("-2.5");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.Number, tokens[0].Kind);
+        Assert.AreEqual("-2.5", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void ZeroWithFractionNumberTest()
+    {
+        var tokens = JsonLexer.Tokenise("0.5");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.Number, tokens[0].Kind);
+        Assert.AreEqual("0.5", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void InvalidFractionNumberTest()
+    {
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise(".5"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("-.5"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("."));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("-."));
+    }
+
+    [TestMethod]
+    public void InvalidNegativeNumberTest()
+    {
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("-"));
+    }
+
+    [TestMethod]
+    public void PositiveExponentNumberTest()
+    {
+        var tokens = JsonLexer.Tokenise("1E+100");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.Number, tokens[0].Kind);
+        Assert.AreEqual("1E+100", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void NegativeExponentNumberTest()
+    {
+        var tokens = JsonLexer.Tokenise("1E-100");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.Number, tokens[0].Kind);
+        Assert.AreEqual("1E-100", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void InvalidExponentNumberTest()
+    {
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("1E-"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("1E+"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("E+100"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("E-100"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("E+"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("E-"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("E"));
+        Assert.Throws<FormatException>(() => JsonLexer.Tokenise("1Ee+100"));
+    }
+
+    [TestMethod]
+    public void ComplexNumberTest()
+    {
+        var tokens = JsonLexer.Tokenise("-22.5E+1628");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.Number, tokens[0].Kind);
+        Assert.AreEqual("-22.5E+1628", tokens[0].Value);
+    }
+
+    [TestMethod]
     public void ValidLiteralTest()
     {
         var tokensA = JsonLexer.Tokenise("  \t\t\t    true          \r\n");
