@@ -138,6 +138,7 @@ public class JsonLexer
             valid = true;
 
         // Ensure negative number starts with a digit.
+        // If first minus symbol is in the exponent, it must have a digit after it anyway.
         if (value.Contains('-'))
         {
             int minusIndex = value.IndexOf('-');
