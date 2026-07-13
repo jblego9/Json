@@ -101,7 +101,6 @@ public class JsonLexer
             Advance();
         }
 
-        // TODO: Simplify with validInSomeForm similar to HandleNumber().
         if (value == "true")
         {
             Push(JsonTokenKind.True, "true");
@@ -136,16 +135,10 @@ public class JsonLexer
         }
 
         var number = new JsonValue.JsonNumber(value);
-        bool validInSomeForm = false;
+        bool valid = false;
 
-        if (number.TryGetDouble(out _))
-            validInSomeForm = true;
-        else if (number.TryGetDecimal(out _))
-            validInSomeForm = true;
-        else if (number.TryGetInt32(out _))
-            validInSomeForm = true;
-        else if (number.TryGetInt64(out _))
-            validInSomeForm = true;
+        if (number.TryGetDouble(out _) || number.TryGetDecimal(out _) || number.TryGetInt32(out _) || number.TryGetInt64(out _))
+            valid = true;
 
         // Ensure negative number starts with a digit.
         if (value.Contains('-'))
@@ -154,11 +147,11 @@ public class JsonLexer
             if (minusIndex + 1 < value.Length)
             {
                 if (!char.IsDigit(value[minusIndex + 1]))
-                    validInSomeForm = false;
+                    valid = false;
             }
         }
         
-        if (!validInSomeForm)
+        if (!valid)
             throw new FormatException($"Invalid number '{value}' at position: {position}");
         
         Push(JsonTokenKind.Number, value);
