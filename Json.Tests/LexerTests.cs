@@ -194,11 +194,14 @@ public sealed class LexerTests
     }
 
     [TestMethod]
-    public void EmptyArrayTest()
+    public void ObjectTest()
     {
-        var tokens = JsonLexer.Tokenise("[ ]");
-        Assert.HasCount(2, tokens);
-        Assert.AreEqual(JsonTokenKind.OpeningBracket, tokens[0].Kind);
-        Assert.AreEqual(JsonTokenKind.ClosingBracket, tokens[1].Kind);
+        var tokens = JsonLexer.Tokenise("{ \"damage\" : 50, \"range\": 1000, \"health\":100, \"firerate\" :2 }");
+        Assert.HasCount(17, tokens);
+        Assert.AreEqual(JsonTokenKind.OpeningBrace, tokens[0].Kind);
+        Assert.AreEqual(JsonTokenKind.ClosingBrace, tokens[16].Kind);
+        Assert.AreEqual(JsonTokenKind.String, tokens[5].Kind);
+        Assert.AreEqual(JsonTokenKind.Comma, tokens[12].Kind);
+        Assert.AreEqual(JsonTokenKind.Colon, tokens[10].Kind);
     }
 }
