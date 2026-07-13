@@ -7,8 +7,8 @@ namespace Json.Tests;
 /// <para>Ensures tokens have valid values.</para>
 /// </summary>
 [TestClass]
-[TestCategory("Lexer")]
-public sealed class LexerTests
+[TestCategory("JsonLexer")]
+public sealed class JsonLexerTests
 {
     [TestMethod]
     public void UnexpectedCharacterTest()

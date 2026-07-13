@@ -6,10 +6,11 @@ namespace Json.Tests;
 /// <para>Ensures equality based on values and not object references.</para>
 /// <para>Ensures item order sensitivity for <see cref="JsonValue.JsonArray"/> and field order insensitivity for <see cref="JsonValue.JsonObject"/></para>
 /// <para>Ensures number equality regardless of asXXXX or tryGetXXXX methods for <see cref="JsonValue.JsonNumber"/></para>
+/// <para>Ensures attempting to get a number via asXXXX or tryGetXXXX as the wrong data type fails.</para>
 /// </summary>
 [TestClass]
-[TestCategory("ValueEquality")]
-public sealed class ValueEqualityTests
+[TestCategory("JsonValue")]
+public sealed class JsonValueTests
 {
     [TestMethod]
     public void JsonStringEqualityTest()
@@ -79,6 +80,24 @@ public sealed class ValueEqualityTests
         
         // Should be equal regardless of asXXXX or tryGetXXXX.
         Assert.AreEqual(a.AsInt64(), tryGetInt64);
+    }
+
+    [TestMethod]
+    public void InvalidAsNumberTest()
+    {
+        Assert.Throws<FormatException>(() => new JsonValue.JsonNumber("123abc").AsDouble());
+        Assert.Throws<FormatException>(() => new JsonValue.JsonNumber("123abc").AsDecimal());
+        Assert.Throws<FormatException>(() => new JsonValue.JsonNumber("2.5").AsInt32());
+        Assert.Throws<FormatException>(() => new JsonValue.JsonNumber("2.5").AsInt64());
+    }
+
+    [TestMethod]
+    public void InvalidTryGetNumberTest()
+    {
+        Assert.IsFalse(new JsonValue.JsonNumber("123abc").TryGetDouble(out _));
+        Assert.IsFalse(new JsonValue.JsonNumber("123abc").TryGetDecimal(out _));
+        Assert.IsFalse(new JsonValue.JsonNumber("2.5").TryGetInt32(out _));
+        Assert.IsFalse(new JsonValue.JsonNumber("2.5").TryGetInt64(out _));
     }
 
     [TestMethod]
