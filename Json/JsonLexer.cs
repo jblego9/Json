@@ -34,14 +34,12 @@ public class JsonLexer
                 case ']': Push(JsonTokenKind.ClosingBracket, "]"); Advance(); break;
                 case ':': Push(JsonTokenKind.Colon, ":"); Advance(); break;
                 case ',': Push(JsonTokenKind.Comma, ","); Advance(); break;
-                default: {
+                default:
                     if (char.IsWhiteSpace(c)) SkipWhitespace();
                     else if (char.IsLetter(c)) HandleLiteral();
                     else if (c == '-'|| char.IsDigit(c)) HandleNumber();
                     else throw new FormatException($"Unexpected character '{c}' at position: {position}");
-
                     break;
-                }
             }
         }
     }
