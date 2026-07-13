@@ -1,5 +1,11 @@
 namespace Json.Tests;
 
+/// <summary>
+/// Ensures unexpected characters and malformed tokens are detected.
+/// <para>Ensures the correct token kinds are produced.</para>
+/// <para>Ensures tokens have their correct values.</para>
+/// <para>Ensures tokens have valid values.</para>
+/// </summary>
 [TestClass]
 [TestCategory("Lexer")]
 public sealed class LexerTests
@@ -191,6 +197,8 @@ public sealed class LexerTests
         Assert.AreEqual(JsonTokenKind.Comma, tokens[2].Kind);
         Assert.AreEqual(JsonTokenKind.Comma, tokens[10].Kind);
         Assert.AreEqual(JsonTokenKind.String, tokens[13].Kind);
+        Assert.AreEqual("3E+100", tokens[5].Value);
+        Assert.AreEqual("Apples", tokens[13].Value);
     }
 
     [TestMethod]
@@ -203,5 +211,7 @@ public sealed class LexerTests
         Assert.AreEqual(JsonTokenKind.String, tokens[5].Kind);
         Assert.AreEqual(JsonTokenKind.Comma, tokens[12].Kind);
         Assert.AreEqual(JsonTokenKind.Colon, tokens[10].Kind);
+        Assert.AreEqual("range", tokens[5].Value);
+        Assert.AreEqual("2", tokens[15].Value);
     }
 }

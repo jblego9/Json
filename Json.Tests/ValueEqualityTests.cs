@@ -3,7 +3,6 @@
 namespace Json.Tests;
 
 /// <summary>
-/// Not the most thorough.
 /// <para>Ensures equality based on values and not object references.</para>
 /// <para>Ensures item order sensitivity for <see cref="JsonValue.JsonArray"/> and field order insensitivity for <see cref="JsonValue.JsonObject"/></para>
 /// <para>Ensures number equality regardless of asXXXX or tryGetXXXX methods for <see cref="JsonValue.JsonNumber"/></para>

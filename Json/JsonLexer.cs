@@ -1,7 +1,9 @@
-using Microsoft.VisualBasic;
-
 namespace Json;
 
+/// <summary>
+/// Reads in a JSON string and produces a list of <see cref="JsonToken"/>.
+/// <para>Ensures the tokens themselves are correct, but not token order correctness.</para>
+/// </summary>
 public class JsonLexer
 {
     public static List<JsonToken> Tokenise(string source)
@@ -46,18 +48,6 @@ public class JsonLexer
 
     private bool IsFinished() => position >= source.Length;
     private char At() => source[position];
-
-    private bool TryPeek(out char value)
-    {
-        if (position + 1 >= source.Length) {
-            value = ' ';
-            return false;
-        }
-        
-        value = source[position + 1];
-        return true;
-    }
-
     private void Advance(ushort amount = 1) => position += amount;
     private void Push(JsonTokenKind kind, string value = "") => tokens.Add(new JsonToken(kind, value));
 
@@ -109,11 +99,13 @@ public class JsonLexer
         {
             Push(JsonTokenKind.True, "true");
             return;
-        } else if (value == "false")
+        }
+        else if (value == "false")
         {
             Push(JsonTokenKind.False, "false");
             return;
-        } else if (value == "null")
+        }
+        else if (value == "null")
         {
             Push(JsonTokenKind.Null, "null");
             return;
@@ -141,6 +133,7 @@ public class JsonLexer
         var number = new JsonValue.JsonNumber(value);
         bool valid = false;
 
+        // Ensures the number is valid in atleast one form.
         if (number.TryGetDouble(out _) || number.TryGetDecimal(out _) || number.TryGetInt32(out _) || number.TryGetInt64(out _))
             valid = true;
 
