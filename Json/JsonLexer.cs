@@ -62,7 +62,6 @@ public class JsonLexer
             Advance();
     }
 
-    // TODO: Handle escape sequences.
     private void HandleString()
     {
         Advance(); // Skip opening quotation mark.

@@ -13,7 +13,7 @@ public sealed class LexerTests
     }
 
     [TestMethod]
-    public void ValidStringTest()
+    public void StringTest()
     {
         var tokens = JsonLexer.Tokenise(" \t\n  \"Apples\"    \r\n    ");
         Assert.HasCount(1, tokens);
@@ -22,6 +22,24 @@ public sealed class LexerTests
         // Whitespace before and after the opening and closing quotation marks should be skipped.
         // Opening and closing quotation marks should be ignored.
         Assert.AreEqual("Apples", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void EmptyStringTest()
+    {
+        var tokens = JsonLexer.Tokenise("\"\"");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.String, tokens[0].Kind);
+        Assert.AreEqual("", tokens[0].Value);
+    }
+
+    [TestMethod]
+    public void EscapeSequenceStringTest()
+    {
+        var tokens = JsonLexer.Tokenise("\" \\\\ \\/ \\b \\f \\n \\r \\t \\u002F Apples \"");
+        Assert.HasCount(1, tokens);
+        Assert.AreEqual(JsonTokenKind.String, tokens[0].Kind);
+        Assert.AreEqual(" \\\\ \\/ \\b \\f \\n \\r \\t \\u002F Apples ", tokens[0].Value);
     }
 
     [TestMethod]
