@@ -180,4 +180,25 @@ public sealed class LexerTests
         Assert.Throws<FormatException>(() =>JsonLexer.Tokenise("FaLsE"));
         Assert.Throws<FormatException>(() =>JsonLexer.Tokenise("nullable"));
     }
+
+    [TestMethod]
+    public void ArrayTest()
+    {
+        var tokens = JsonLexer.Tokenise("[ 1, -2.5, 3E+100, true, false, null, \"Apples\" ]");
+        Assert.HasCount(15, tokens);
+        Assert.AreEqual(JsonTokenKind.OpeningBracket, tokens[0].Kind);
+        Assert.AreEqual(JsonTokenKind.ClosingBracket, tokens[14].Kind);
+        Assert.AreEqual(JsonTokenKind.Comma, tokens[2].Kind);
+        Assert.AreEqual(JsonTokenKind.Comma, tokens[10].Kind);
+        Assert.AreEqual(JsonTokenKind.String, tokens[13].Kind);
+    }
+
+    [TestMethod]
+    public void EmptyArrayTest()
+    {
+        var tokens = JsonLexer.Tokenise("[ ]");
+        Assert.HasCount(2, tokens);
+        Assert.AreEqual(JsonTokenKind.OpeningBracket, tokens[0].Kind);
+        Assert.AreEqual(JsonTokenKind.ClosingBracket, tokens[1].Kind);
+    }
 }

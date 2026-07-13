@@ -28,6 +28,12 @@ public class JsonLexer
             switch (c)
             {
                 case '"': HandleString(); break;
+                case '{': Push(JsonTokenKind.OpeningBrace, "{"); Advance(); break;
+                case '}': Push(JsonTokenKind.ClosingBrace, "}"); Advance(); break;
+                case '[': Push(JsonTokenKind.OpeningBracket, "["); Advance(); break;
+                case ']': Push(JsonTokenKind.ClosingBracket, "]"); Advance(); break;
+                case ':': Push(JsonTokenKind.Colon, ":"); Advance(); break;
+                case ',': Push(JsonTokenKind.Comma, ","); Advance(); break;
                 default: {
                     if (char.IsWhiteSpace(c)) SkipWhitespace();
                     else if (char.IsLetter(c)) HandleLiteral();

@@ -2,9 +2,15 @@ namespace Json;
 
 public enum JsonTokenKind
 {
-    String,
+    String, // Opening and closing quotation marks not included, but implied.
     Number,
     True,
     False,
-    Null
+    Null,
+    OpeningBrace, // {
+    ClosingBrace, // }
+    OpeningBracket, // [
+    ClosingBracket, // ]
+    Colon,
+    Comma,
 }
