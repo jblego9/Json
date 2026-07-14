@@ -1,4 +1,4 @@
-namespace Json;
+namespace Json.Parsing;
 
 public enum JsonTokenKind
 {

@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Globalization;
 
-namespace Json;
+namespace Json.Document;
 
 /// <summary>
 /// Represents a JSON value. This is a closed hierarchy, only allowing for subtypes nested within this type.

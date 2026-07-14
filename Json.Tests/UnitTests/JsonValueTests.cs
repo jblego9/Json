@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 
-namespace Json.Tests;
+namespace Json.Tests.UnitTests;
+using Document;
 
 /// <summary>
 /// <para>Ensures equality based on values and not object references.</para>

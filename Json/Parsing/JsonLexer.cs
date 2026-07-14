@@ -1,4 +1,4 @@
-namespace Json;
+namespace Json.Parsing;
 
 /// <summary>
 /// Reads in a JSON string and produces a list of <see cref="JsonToken"/>.
@@ -126,7 +126,7 @@ public class JsonLexer
             Advance();
         }
 
-        var number = new JsonValue.JsonNumber(value);
+        var number = new Document.JsonValue.JsonNumber(value);
         bool valid = false;
 
         // Ensures the number is valid in atleast one form.
