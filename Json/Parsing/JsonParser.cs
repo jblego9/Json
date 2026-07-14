@@ -1,8 +1,10 @@
+using Json.Document;
+
 namespace Json.Parsing;
 
 public class JsonParser
 {
-    public static Document.JsonValue Parse(List<JsonToken> tokens)
+    public static JsonValue Parse(List<JsonToken> tokens)
     {
         var parser = new JsonParser(tokens);
         return parser.InternalParse();
@@ -16,26 +18,26 @@ public class JsonParser
     private JsonToken Consume()  => tokens[position++];
     private JsonToken At() => tokens[position];
 
-    private Document.JsonValue InternalParse()
+    private JsonValue InternalParse()
     {
         JsonToken token = Consume();
         return token.Kind switch
         {
-            JsonTokenKind.String => new Document.JsonValue.JsonString(token.Value),
-            JsonTokenKind.Number => new Document.JsonValue.JsonNumber(token.Value),
-            JsonTokenKind.True => new Document.JsonValue.JsonBoolean(true),
-            JsonTokenKind.False => new Document.JsonValue.JsonBoolean(false),
-            JsonTokenKind.Null => new Document.JsonValue.JsonNull(),
+            JsonTokenKind.String => new JsonValue.JsonString(token.Value),
+            JsonTokenKind.Number => new JsonValue.JsonNumber(token.Value),
+            JsonTokenKind.True => new JsonValue.JsonBoolean(true),
+            JsonTokenKind.False => new JsonValue.JsonBoolean(false),
+            JsonTokenKind.Null => new JsonValue.JsonNull(),
             JsonTokenKind.OpeningBracket => ParseArray(),
             JsonTokenKind.OpeningBrace => ParseObject(),
             _ => throw new FormatException($"Unexpected token '{token}' at position: {position}"),
         };
     }
 
-    private Document.JsonValue.JsonArray ParseArray()
+    private JsonValue.JsonArray ParseArray()
     {
         // Opening bracket has already been consumed.
-        List<Document.JsonValue> items = [];
+        List<JsonValue> items = [];
 
         bool gotComma = false;
         while (!IsFinished())
@@ -46,7 +48,7 @@ public class JsonParser
                     throw new FormatException($"Expected value after ',' at position: {position}");
 
                 Consume();
-                return new Document.JsonValue.JsonArray([.. items]);
+                return new JsonValue.JsonArray([.. items]);
             }
 
             items.Add(InternalParse());
@@ -68,10 +70,10 @@ public class JsonParser
         throw new FormatException($"Expected ']' at end of array, at position: {position}");
     }
 
-    private Document.JsonValue.JsonObject ParseObject()
+    private JsonValue.JsonObject ParseObject()
     {
         // Opening brace has already been consumed.
-        Dictionary<Document.JsonValue.JsonString, Document.JsonValue> fields = [];
+        Dictionary<JsonValue.JsonString, JsonValue> fields = [];
         
         bool gotComma = false;
         while (!IsFinished())
@@ -82,11 +84,11 @@ public class JsonParser
                     throw new FormatException($"Expected field name after ',' at position: {position}");
 
                 Consume();
-                return new Document.JsonValue.JsonObject([.. fields]);
+                return new JsonValue.JsonObject([.. fields]);
             }
 
-            Document.JsonValue name = InternalParse();
-            if (name is not Document.JsonValue.JsonString)
+            JsonValue name = InternalParse();
+            if (name is not JsonValue.JsonString)
                 throw new FormatException($"Expected field name at position: {position}");
 
             if (IsFinished())
@@ -97,8 +99,8 @@ public class JsonParser
 
             Consume();
 
-            Document.JsonValue value = InternalParse();
-            fields.Add((Document.JsonValue.JsonString)name, value);
+            JsonValue value = InternalParse();
+            fields.Add((JsonValue.JsonString)name, value);
             gotComma = false;
 
             if (IsFinished())

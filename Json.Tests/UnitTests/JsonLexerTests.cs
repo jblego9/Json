@@ -1,5 +1,6 @@
+using Json.Parsing;
+
 namespace Json.Tests.UnitTests;
-using Parsing;
 
 /// <summary>
 /// Ensures unexpected characters and malformed tokens are detected.

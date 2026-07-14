@@ -1,3 +1,5 @@
+using Json.Document;
+
 namespace Json.Tests.IntegrationTests;
 
 [TestClass]
@@ -7,18 +9,18 @@ public sealed class FromJsonStringTests
     [TestMethod]
     public void JsonArrayFromStringTest()
     {
-        Document.JsonValue parsed = Document.JsonDocument.Parse(" [123, \"apples\", true, false, null, [1, 2, 3], { \"reloading\": false} ]");
-        Assert.IsInstanceOfType<Document.JsonValue.JsonArray>(parsed);
+        JsonValue parsed = JsonDocument.Parse(" [123, \"apples\", true, false, null, [1, 2, 3], { \"reloading\": false} ]");
+        Assert.IsInstanceOfType<JsonValue.JsonArray>(parsed);
 
-        var actual = (Document.JsonValue.JsonArray)parsed;
+        var actual = (JsonValue.JsonArray)parsed;
         Assert.IsNotNull(actual);
         Assert.HasCount(7, actual.Items);
 
-        var subArray = (Document.JsonValue.JsonArray)actual.Items[5];
+        var subArray = (JsonValue.JsonArray)actual.Items[5];
         Assert.IsNotNull(subArray);
         Assert.HasCount(3, subArray.Items);
 
-        var innerObject = (Document.JsonValue.JsonObject)actual.Items[6];
+        var innerObject = (JsonValue.JsonObject)actual.Items[6];
         Assert.IsNotNull(innerObject);
         Assert.HasCount(1, innerObject.Fields);
     }
@@ -26,7 +28,7 @@ public sealed class FromJsonStringTests
     [TestMethod]
     public void JsonObjectFromStringTest()
     {
-        Document.JsonValue parsed = Document.JsonDocument.Parse("""
+        JsonValue parsed = JsonDocument.Parse("""
                 {
                     "damage": 10,
                     "headshotDamage": 20,
@@ -39,13 +41,13 @@ public sealed class FromJsonStringTests
                 }
             """
         );
-        Assert.IsInstanceOfType<Document.JsonValue.JsonObject>(parsed);
+        Assert.IsInstanceOfType<JsonValue.JsonObject>(parsed);
 
-        var actual = (Document.JsonValue.JsonObject)parsed;
+        var actual = (JsonValue.JsonObject)parsed;
         Assert.IsNotNull(actual);
         Assert.HasCount(5, actual.Fields);
 
-        var subObject = (Document.JsonValue.JsonObject)actual.Fields[new Document.JsonValue.JsonString("randomObject")];
+        var subObject = (JsonValue.JsonObject)actual.Fields[new JsonValue.JsonString("randomObject")];
         Assert.IsNotNull(subObject);
         Assert.HasCount(2, subObject.Fields);
     }

@@ -1,3 +1,5 @@
+using Json.Document;
+
 namespace Json.Parsing;
 
 /// <summary>
@@ -126,7 +128,7 @@ public class JsonLexer
             Advance();
         }
 
-        var number = new Document.JsonValue.JsonNumber(value);
+        var number = new JsonValue.JsonNumber(value);
         bool valid = false;
 
         // Ensures the number is valid in atleast one form.
