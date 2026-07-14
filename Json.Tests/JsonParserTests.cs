@@ -97,4 +97,27 @@ public sealed class JsonParserTests
             new JsonToken(JsonTokenKind.ClosingBracket, "]"), 
         ]));
     }
+
+    [TestMethod]
+    public void ParseObjectTest()
+    {
+        var value = JsonParser.Parse([
+            new JsonToken(JsonTokenKind.OpeningBrace, "{"),
+            new JsonToken(JsonTokenKind.String, "health"),
+            new JsonToken(JsonTokenKind.Colon, ":"),
+            new JsonToken(JsonTokenKind.Number, "100"),
+            new JsonToken(JsonTokenKind.Comma, ","),
+            new JsonToken(JsonTokenKind.String, "ammo"),
+            new JsonToken(JsonTokenKind.Colon, ":"),
+            new JsonToken(JsonTokenKind.Number, "23"),
+            new JsonToken(JsonTokenKind.ClosingBrace, "}"),
+        ]);
+        Assert.IsInstanceOfType<JsonValue.JsonObject>(value);
+
+        var actual = value as JsonValue.JsonObject;
+        Assert.IsNotNull(actual);
+        Assert.HasCount(2, actual.Fields);
+        Assert.AreEqual("100", ((JsonValue.JsonNumber)actual.Fields[new JsonValue.JsonString("health")]).Raw);
+        Assert.AreEqual("23", ((JsonValue.JsonNumber)actual.Fields[new JsonValue.JsonString("ammo")]).Raw);
+    }
 }

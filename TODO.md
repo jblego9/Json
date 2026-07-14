@@ -1,3 +1,3 @@
 # TODO
-- Parsing Values
-    - Object
+- Deserialization
+- Serialization

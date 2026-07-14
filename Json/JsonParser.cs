@@ -27,6 +27,7 @@ public class JsonParser
             JsonTokenKind.False => new JsonValue.JsonBoolean(false),
             JsonTokenKind.Null => new JsonValue.JsonNull(),
             JsonTokenKind.OpeningBracket => ParseArray(),
+            JsonTokenKind.OpeningBrace => ParseObject(),
             _ => throw new FormatException($"Unexpected token '{token}' at position: {position}"),
         };
     }
@@ -51,7 +52,6 @@ public class JsonParser
             items.Add(InternalParse());
             gotComma = false;
 
-            // InternalParse advances position, meaning checking for a comma can throw.
             if (IsFinished())
                 break;
 
@@ -63,8 +63,57 @@ public class JsonParser
         }
 
         if (gotComma)
-            throw new FormatException($"Expected value after ',' at position: {position}");
+            throw new FormatException($"Expected a value after ',' at position: {position}");
 
         throw new FormatException($"Expected ']' at end of array, at position: {position}");
+    }
+
+    private JsonValue.JsonObject ParseObject()
+    {
+        // Opening brace has already been consumed.
+        Dictionary<JsonValue.JsonString, JsonValue> fields = [];
+        
+        bool gotComma = false;
+        while (!IsFinished())
+        {
+            if (At().Kind == JsonTokenKind.ClosingBrace)
+            {
+                if (gotComma)
+                    throw new FormatException($"Expected field name after ',' at position: {position}");
+
+                Consume();
+                return new JsonValue.JsonObject([.. fields]);
+            }
+
+            JsonValue name = InternalParse();
+            if (name is not JsonValue.JsonString)
+                throw new FormatException($"Expected field name at position: {position}");
+
+            if (IsFinished())
+                break;
+            
+            if (At().Kind != JsonTokenKind.Colon)
+                throw new FormatException($"Expected ':' after field name at position: {position}");
+
+            Consume();
+
+            JsonValue value = InternalParse();
+            fields.Add((JsonValue.JsonString)name, value);
+            gotComma = false;
+
+            if (IsFinished())
+                break;
+
+            if (At().Kind == JsonTokenKind.Comma)
+            {
+                gotComma = true;
+                Consume();
+            }
+        }
+
+        if (gotComma)
+            throw new FormatException($"Expected field name after ',' at position: {position}");
+
+        throw new FormatException($"Expected '}}' at end of object, at position: {position}");
     }
 }
