@@ -12,3 +12,10 @@ Wraps the `Parsing` layer. The `JsonDocument` can both parse and write JSON. Par
 
 ### Serialization
 Does not exist yet...
+
+## Testing
+Run `dotnet test` to run all tests.
+
+### Tests Include:  
+- Unit Tests
+- Integration Tests
