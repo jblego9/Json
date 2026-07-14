@@ -199,4 +199,15 @@ public sealed class JsonValueTests
         // These should never not be equal.
         Assert.AreEqual(a, b);
     }
+
+    [TestMethod]
+    public void SubtypeDerivedFromTest()
+    {
+        Assert.IsInstanceOfType<JsonValue>(new JsonValue.JsonString("a"));
+        Assert.IsInstanceOfType<JsonValue>(new JsonValue.JsonNumber("2"));
+        Assert.IsInstanceOfType<JsonValue>(new JsonValue.JsonBoolean(true));
+        Assert.IsInstanceOfType<JsonValue>(new JsonValue.JsonNull());
+        Assert.IsInstanceOfType<JsonValue>(new JsonValue.JsonArray([]));
+        Assert.IsInstanceOfType<JsonValue>(new JsonValue.JsonObject([]));
+    }
 }
