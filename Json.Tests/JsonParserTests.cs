@@ -62,4 +62,39 @@ public sealed class JsonParserTests
         var actual = value as JsonValue.JsonNull;
         Assert.IsNotNull(actual);
     }
+
+    [TestMethod]
+    public void ParseArrayTest()
+    {
+        var value = JsonParser.Parse([
+           new JsonToken(JsonTokenKind.OpeningBracket, "["),
+           new JsonToken(JsonTokenKind.String, "Apples"),
+           new JsonToken(JsonTokenKind.Comma, ","),
+           new JsonToken(JsonTokenKind.Number, "22"),
+           new JsonToken(JsonTokenKind.ClosingBracket, "]"), 
+        ]);
+        Assert.IsInstanceOfType<JsonValue.JsonArray>(value);
+
+        var actual = value as JsonValue.JsonArray;
+        Assert.IsNotNull(actual);
+        Assert.HasCount(2, actual.Items);
+    }
+
+    [TestMethod]
+    public void ParseInvalidArrayTest()
+    {
+        Assert.Throws<FormatException>(() => JsonParser.Parse([
+            new JsonToken(JsonTokenKind.OpeningBracket, "["),
+            new JsonToken(JsonTokenKind.String, "Apples"),
+            new JsonToken(JsonTokenKind.Comma, ","),
+            new JsonToken(JsonTokenKind.Number, "22"),
+        ]));
+
+        Assert.Throws<FormatException>(() => JsonParser.Parse([
+            new JsonToken(JsonTokenKind.OpeningBracket, "["),
+            new JsonToken(JsonTokenKind.String, "Apples"),
+            new JsonToken(JsonTokenKind.Comma, ","),
+            new JsonToken(JsonTokenKind.ClosingBracket, "]"), 
+        ]));
+    }
 }
