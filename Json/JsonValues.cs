@@ -12,7 +12,9 @@ public abstract record JsonValue
     private JsonValue() {}
 
     public sealed record JsonString(string Value) : JsonValue;
-
+    public sealed record JsonBoolean(bool Value) : JsonValue;
+    public sealed record JsonNull : JsonValue;
+    
     /// <summary>
     /// Represents a JSON number. Internally stores a string which intended to be parsed as the
     /// desired numeric type. Equality tests the internal string and not a numeric value.
@@ -94,8 +96,4 @@ public abstract record JsonValue
             return hash.ToHashCode();
         }
     }
-
-    public sealed record JsonBoolean(bool Value) : JsonValue;
-
-    public sealed record JsonNull : JsonValue;
 }

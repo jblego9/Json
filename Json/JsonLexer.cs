@@ -13,10 +13,7 @@ public class JsonLexer
         return lexer.tokens;
     }
 
-    private JsonLexer(string source)
-    {
-        this.source = source;
-    }
+    private JsonLexer(string source) => this.source = source;
 
     private readonly List<JsonToken> tokens = [];
     private readonly string source;
@@ -53,8 +50,7 @@ public class JsonLexer
 
     private void SkipWhitespace()
     {
-        while (!IsFinished() && char.IsWhiteSpace(At()))
-            Advance();
+        while (!IsFinished() && char.IsWhiteSpace(At())) Advance();
     }
 
     private void HandleString()

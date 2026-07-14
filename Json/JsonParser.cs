@@ -8,15 +8,10 @@ public class JsonParser
         return parser.InternalParse();
     }
 
-    private JsonParser(List<JsonToken> tokens)
-    {
-        this.tokens = tokens;
-    }
+    private JsonParser(List<JsonToken> tokens) => this.tokens = tokens;
 
     private readonly List<JsonToken> tokens;
     private int position = 0;
-
-    private bool IsFinished() => position >= tokens.Count;
     private JsonToken Consume()  => tokens[position++];
 
     private JsonValue InternalParse()
