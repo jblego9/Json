@@ -96,5 +96,6 @@ public abstract record JsonValue
     }
 
     public sealed record JsonBoolean(bool Value) : JsonValue;
+
     public sealed record JsonNull : JsonValue;
 }

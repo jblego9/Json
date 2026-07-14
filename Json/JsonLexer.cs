@@ -22,6 +22,11 @@ public class JsonLexer
     private readonly string source;
     private int position = 0;
 
+    private bool IsFinished() => position >= source.Length;
+    private char At() => source[position];
+    private void Advance(ushort amount = 1) => position += amount;
+    private void Push(JsonTokenKind kind, string value = "") => tokens.Add(new JsonToken(kind, value));
+
     private void InternalTokenise()
     {
         while (!IsFinished())
@@ -45,11 +50,6 @@ public class JsonLexer
             }
         }
     }
-
-    private bool IsFinished() => position >= source.Length;
-    private char At() => source[position];
-    private void Advance(ushort amount = 1) => position += amount;
-    private void Push(JsonTokenKind kind, string value = "") => tokens.Add(new JsonToken(kind, value));
 
     private void SkipWhitespace()
     {
