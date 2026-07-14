@@ -1,4 +1,6 @@
 # TODO
-- Update documentation (Parsing and Document)
-- Deserialization
-- Serialization
+- Document layer
+    - Write json
+- Serialization layer
+    - Serialization
+    - Deserialization
