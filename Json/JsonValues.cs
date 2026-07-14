@@ -43,7 +43,7 @@ public abstract record JsonValue
         public override string ToString() => Raw;
     }
 
-    public sealed record JsonObject
+    public sealed record JsonObject : JsonValue
     {
         public ImmutableDictionary<JsonString, JsonValue> Fields { get; }
 
@@ -78,7 +78,7 @@ public abstract record JsonValue
         }
     }
 
-    public sealed record JsonArray
+    public sealed record JsonArray : JsonValue
     {
         public ImmutableArray<JsonValue> Items { get; }
 
