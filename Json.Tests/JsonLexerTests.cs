@@ -3,8 +3,7 @@ namespace Json.Tests;
 /// <summary>
 /// Ensures unexpected characters and malformed tokens are detected.
 /// <para>Ensures the correct token kinds are produced.</para>
-/// <para>Ensures tokens have their correct values.</para>
-/// <para>Ensures tokens have valid values.</para>
+/// <para>Ensures tokens have their valid and correct values.</para>
 /// </summary>
 [TestClass]
 [TestCategory("JsonLexer")]

@@ -1,5 +1,9 @@
 namespace Json.Tests;
 
+/// <summary>
+/// <Ensures token grammar is valid.
+/// Ensures the correct <see cref="JsonValue"/> records are created with their correct values.
+/// </summary>
 [TestClass]
 [TestCategory("JsonParser")]
 public sealed class JsonParserTests
