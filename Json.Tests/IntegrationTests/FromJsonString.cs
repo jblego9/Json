@@ -3,7 +3,7 @@ using Json.Document;
 namespace Json.Tests.IntegrationTests;
 
 [TestClass]
-[TestCategory("FromJsonStringTests")]
+[TestCategory("FromJsonString")]
 public sealed class FromJsonStringTests
 {
     [TestMethod]
