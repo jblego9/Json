@@ -1,8 +1,11 @@
-using System.Security.Cryptography.X509Certificates;
 using Json.Parsing;
 
 namespace Json.Document;
 
+/// <summary>
+/// Can parse a JSON string and create a <see cref="JsonValue"/> tree, and can write a JSON string from a <see cref="JsonValue"/> tree.
+/// <para>The caller is expected to read from or create the <see cref="JsonValue"/> tree themselves when parsing or writing respectively.</para>
+/// </summary>
 public static class JsonDocument
 {
     public static JsonValue Parse(string source) => JsonParser.Parse(JsonLexer.Tokenise(source));

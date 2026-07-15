@@ -2,6 +2,10 @@ using Json.Document;
 
 namespace Json.Parsing;
 
+/// <summary>
+/// Takes in a list of <see cref="JsonToken"/ and returns a <see cref="JsonValue"/> tree.
+/// <para>Ensures token grammar correctness,</para>
+/// </summary>
 public class JsonParser
 {
     public static JsonValue Parse(List<JsonToken> tokens)
