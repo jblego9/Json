@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Json.Parsing;
 
 namespace Json.Document;
@@ -15,7 +16,7 @@ public static class JsonDocument
             JsonValue.JsonBoolean => ((JsonValue.JsonBoolean)json).Value ? "true" : "false",
             JsonValue.JsonNull => "null",
             JsonValue.JsonArray => WriteArray((JsonValue.JsonArray)json),
-            // JsonValue.JsonObject => WriteObject((JsonValue.JsonObject)json),
+            JsonValue.JsonObject => WriteObject((JsonValue.JsonObject)json),
             _ => throw new FormatException("Invalid JsonValue")
         };
     }
@@ -36,5 +37,23 @@ public static class JsonDocument
         }
 
         return result + "]";
+    }
+
+    private static string WriteObject(JsonValue.JsonObject jsonObject)
+    {
+        string result = "{";
+
+        bool firstField = true;
+        foreach (var field in jsonObject.Fields)
+        {
+            if (!firstField)
+                result += ", ";
+            else
+                firstField = false;
+            
+            result += Write(field.Key) + ": " + Write(field.Value);
+        }
+
+        return result + "}";
     }
 }
