@@ -60,11 +60,19 @@ public class JsonLexer
         Advance(); // Skip opening quotation mark.
 
         string value = "";
+
+        bool isEscaped = false;
         while (!IsFinished())
         {
+            bool justEscaped = false;
             char c = At();
 
-            if (c == '"')
+            if (!isEscaped && c == '\\')
+            {
+                isEscaped = true;
+                justEscaped = true;
+            }
+            else if (!isEscaped && c == '"')
             {
                 Advance(); // Skip closing quotation mark.
                 Push(JsonTokenKind.String, value);
@@ -73,6 +81,9 @@ public class JsonLexer
 
             value += c;
             Advance();
+            
+            if (!justEscaped && isEscaped)
+                isEscaped = false;
         }
 
         throw new FormatException($"Unterminated string \"{value}\" at position: {position}");
