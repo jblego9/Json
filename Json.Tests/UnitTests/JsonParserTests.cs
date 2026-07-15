@@ -124,7 +124,7 @@ public sealed class JsonParserTests
         var actual = value as JsonValue.JsonObject;
         Assert.IsNotNull(actual);
         Assert.HasCount(2, actual.Fields);
-        Assert.AreEqual("100", ((JsonValue.JsonNumber)actual.Fields[new JsonValue.JsonString("health")]).Raw);
-        Assert.AreEqual("23", ((JsonValue.JsonNumber)actual.Fields[new JsonValue.JsonString("ammo")]).Raw);
+        Assert.AreEqual("100", ((JsonValue.JsonNumber)actual.Get("health")).Raw);
+        Assert.AreEqual("23", ((JsonValue.JsonNumber)actual.Get("ammo")).Raw);
     }
 }

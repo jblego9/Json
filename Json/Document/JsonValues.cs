@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Globalization;
+using System.Numerics;
 
 namespace Json.Document;
 
@@ -45,27 +46,32 @@ public abstract record JsonValue
 
     public sealed record JsonObject : JsonValue
     {
-        public ImmutableDictionary<JsonString, JsonValue> Fields { get; }
+        public ImmutableList<KeyValuePair<JsonString, JsonValue>> Fields { get; }
 
-        // Protects against null dictionary.
-        public JsonObject(ImmutableDictionary<JsonString, JsonValue> fields) => Fields = fields is null ? [] : fields;
+        // Protects against null list.
+        public JsonObject(ImmutableList<KeyValuePair<JsonString, JsonValue>> fields) => Fields = fields is null ? [] : fields;
 
-        // Ensure it is based on field's keys and values, and not field order.
+        public JsonValue Get(string key)
+        {
+            return Fields.Find(x => x.Key == new JsonString(key)).Value;
+        }
+
+        // Ensure it is based on field's keys and values and field order.
         public bool Equals(JsonObject? other)
         {
             if (other is null || Fields.Count != other.Fields.Count)
                 return false;
 
-            foreach (var field in Fields)
+            for (int i = 0; i < Fields.Count; i++)
             {
-                if (!other.Fields.TryGetValue(field.Key, out var value) || value != field.Value)
+                if (other.Fields[i].Key != Fields[i].Key || other.Fields[i].Value != Fields[i].Value)
                     return false;
             }
 
             return true;
         }
 
-        // Ensure it is based on field's keys and values, and not field order.
+        // Ensure it is based on field's keys and values and field order.
         public override int GetHashCode()
         {
             var hash = new HashCode();

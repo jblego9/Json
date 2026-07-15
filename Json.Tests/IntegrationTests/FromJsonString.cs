@@ -47,7 +47,7 @@ public sealed class FromJsonStringTests
         Assert.IsNotNull(actual);
         Assert.HasCount(5, actual.Fields);
 
-        var subObject = (JsonValue.JsonObject)actual.Fields[new JsonValue.JsonString("randomObject")];
+        var subObject = (JsonValue.JsonObject)actual.Get("randomObject");
         Assert.IsNotNull(subObject);
         Assert.HasCount(2, subObject.Fields);
     }

@@ -23,18 +23,16 @@ public sealed class ToJsonStringTests
                     new JsonValue.JsonNumber("2"),
                     new JsonValue.JsonNumber("3")
                 ]),
-                new JsonValue.JsonObject(
-                    ImmutableDictionary.CreateRange<JsonValue.JsonString, JsonValue>([
-                        new(
-                            new JsonValue.JsonString("health"),
-                            new JsonValue.JsonNumber("100")
-                        ),
-                        new(
-                            new JsonValue.JsonString("ammo"),
-                            new JsonValue.JsonNumber("22")
-                        )
-                    ])
-                )
+                new JsonValue.JsonObject([
+                    new(
+                        new JsonValue.JsonString("health"),
+                        new JsonValue.JsonNumber("100")
+                    ),
+                    new(
+                        new JsonValue.JsonString("ammo"),
+                        new JsonValue.JsonNumber("22")
+                    )
+                ])
             ])
         );
         Assert.AreEqual("[\"apples\", 30, true, false, null, [1, 2, 3], {\"health\": 100, \"ammo\": 22}]", fromJson);
@@ -50,8 +48,7 @@ public sealed class ToJsonStringTests
     public void JsonObjectToStringTest()
     {
         string fromJson = JsonDocument.Write(
-            new JsonValue.JsonObject(
-                ImmutableDictionary.CreateRange<JsonValue.JsonString, JsonValue>([
+            new JsonValue.JsonObject([
                     new(
                         new JsonValue.JsonString("damage"),
                         new JsonValue.JsonNumber("10")
@@ -70,18 +67,21 @@ public sealed class ToJsonStringTests
                     ),
                     new(
                         new JsonValue.JsonString("randomObject"),
-                        new JsonValue.JsonObject(
-                            ImmutableDictionary.CreateRange<JsonValue.JsonString, JsonValue>([
-                                new(
-                                    new JsonValue.JsonString("a"),
-                                    new JsonValue.JsonString("b")
-                                )
-                            ])
-                        )
+                        new JsonValue.JsonObject([
+                            new(
+                                new JsonValue.JsonString("a"),
+                                new JsonValue.JsonString("b")
+                            )
+                        ])
                     )
                 ])
-            )
         );
         Assert.AreEqual("{\"damage\": 10, \"headshotDamage\": 20, \"randomArray\": [true, false, null], \"randomObject\": {\"a\": \"b\"}}", fromJson);
+
+        JsonValue backToJson = JsonDocument.Parse(fromJson);
+        Assert.IsInstanceOfType<JsonValue.JsonObject>(backToJson);
+
+        string fromJsonAgain = JsonDocument.Write(backToJson);
+        Assert.AreEqual(fromJson, fromJsonAgain);
     }
 }
