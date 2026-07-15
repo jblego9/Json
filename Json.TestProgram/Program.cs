@@ -4,7 +4,7 @@ namespace Json.TestProgram;
 
 public class Program
 {
-    private const string dataFilepath = "data.json";
+    private const string dataFilepath = "Json.TestProgram.data.json";
 
     public static void Main()
     {

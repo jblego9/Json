@@ -1,3 +1,9 @@
+# All Projects
 bin/
 obj/
+
+# Json.Tests
 TestResults/
+
+# Json.TestProgram
+Json.TestProgram.data.json
