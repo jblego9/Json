@@ -4,8 +4,19 @@ namespace Json.Serialization;
 
 /// <summary>
 /// Turns C# value(s) into a JSON string.
-/// <para>Supported Types: <see cref="int"/>, <see cref="long"/>, <see cref="double"/>, <see cref="decimal"/>, <see cref="string"/>, <see cref="bool"/>, <see cref="null"/>, <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{TKey, TValue}"/> of <see cref="string"/> and <see cref="object?"/>, <see cref="System.Collections.IEnumerable"/></para>
 /// <para>Serializes all public fields and properties.</para>
+/// <para>Supported Types:</para>
+/// <list type="bullet">
+/// <item><see cref="int"/></item>
+/// <item><see cref="long"/></item>
+/// <item><see cref="double"/></item>
+/// <item><see cref="decimal"/></item>
+/// <item><see cref="string"/></item>
+/// <item><see cref="bool"/></item>
+/// <item><see langword="null"/></item>
+/// <item><see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{TKey, TValue}"/> of <see cref="string"/> and <see cref="object"/>?</item>
+/// <item><see cref="System.Collections.IEnumerable"/></item>
+/// </list>
 /// </summary>
 public class JsonSerializer
 {
