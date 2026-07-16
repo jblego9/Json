@@ -8,6 +8,9 @@ namespace Json.Parsing;
 /// </summary>
 public class JsonParser
 {
+    /// <summary>
+    /// Throws <see cref="FormatException"/> on failure.
+    /// </summary>
     public static JsonValue Parse(List<JsonToken> tokens)
     {
         var parser = new JsonParser(tokens);

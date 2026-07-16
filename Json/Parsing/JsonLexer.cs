@@ -8,6 +8,9 @@ namespace Json.Parsing;
 /// </summary>
 public class JsonLexer
 {
+    /// <summary>
+    /// Throws <see cref="FormatException"/> on failure.
+    /// </summary>
     public static List<JsonToken> Tokenise(string source)
     {
         var lexer = new JsonLexer(source);

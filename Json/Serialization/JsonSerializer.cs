@@ -9,6 +9,10 @@ namespace Json.Serialization;
 /// </summary>
 public class JsonSerializer
 {
+    /// <summary>
+    /// Throws <see cref="ArgumentException"/> on serialize failure.
+    /// <para>Throws <see cref="FormatException"/> on write failure.</para>
+    /// </summary>
     public static string Serialize(object? value) => JsonDocument.Write(SerializeValue(value));
 
     private static JsonValue SerializeValue(object? value)
