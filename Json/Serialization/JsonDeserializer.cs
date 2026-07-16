@@ -77,7 +77,7 @@ public class JsonDeserializer
         if (!targetType.IsValueType || Nullable.GetUnderlyingType(targetType) != null)
             return null;
 
-        throw new ArgumentException($"Cannot convert JSON null into non-nullable type '{targetType}'");
+        throw new ArgumentException($"Cannot convert JSON null into non-nullable type: {targetType}");
     }
 
     private static object DeserializeArray(Type targetType, JsonValue.JsonArray jsonArray)
