@@ -55,21 +55,4 @@ public class JsonSerializer
     {
         throw new ArgumentException($"Unsupported Type: {value.GetType()}");
     }
-
-    private static bool IsTypeSupported(object? value)
-    {
-        return value switch
-        {
-            int => true,
-            long => true,
-            double => true,
-            decimal => true,
-            string => true,
-            bool => true,
-            null => true,
-            List<object> => true,
-            List<KeyValuePair<string, object>> => true,
-            _ => false
-        };
-    }
 }
