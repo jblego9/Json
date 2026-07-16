@@ -7,21 +7,24 @@ public class Program
 {
     private const string DATA_FILEPATH = "Json.TestProgram.data.json";
 
+    private class Data
+    {
+        public Data()
+        {
+            PreviousText = "";
+            ModificationCount = 0;
+        }
+
+        public string PreviousText;
+        public int ModificationCount;
+    }
+
     public static void Main()
     {
         if (File.Exists(DATA_FILEPATH))
             HandlePreviousText();
         else
             HandleNoPreviousText();
-    }
-
-    /// <summary>
-    /// Throws <see cref="ArgumentException"/> on serialize failure.
-    /// <para>Throws <see cref="FormatException"/> on write failure.</para>
-    /// </summary>
-    private static string CreateJsonObjectString(string previousText, long modificationCount)
-    {
-        return JsonSerializer.Serialize(new { ModificationCount = modificationCount, PreviousText = previousText });
     }
 
     private static void HandleNoPreviousText()
@@ -36,8 +39,9 @@ public class Program
         }
 
         string jsonObjectString;
+
         try {
-            jsonObjectString = CreateJsonObjectString(input, 1);
+            jsonObjectString = JsonSerializer.Serialize(new { ModificationCount = 0, PreviousText = input });
         } catch (FormatException err) {
             Console.WriteLine($"{err.Message}, quitting...");
             return;
@@ -49,12 +53,8 @@ public class Program
 
     private static void HandlePreviousText()
     {
-        var jsonObjectValue = (JsonValue.JsonObject)JsonDocument.Parse(File.ReadAllText(DATA_FILEPATH));
-
-        var previousText = ((JsonValue.JsonString)jsonObjectValue.Get("PreviousText")).Value;
-        var modificationCount = ((JsonValue.JsonNumber)jsonObjectValue.Get("ModificationCount")).AsInt64();
-
-        Console.Write($"Previous text: {previousText}\nModification count: {modificationCount}\nEnter text: ");
+        var data = JsonDeserializer.Deserialize<Data>(File.ReadAllText(DATA_FILEPATH));
+        Console.Write($"Previous text: {data.PreviousText}\nModification count: {data.ModificationCount}\nEnter text: ");
 
         string? input = Console.ReadLine();
         if (input is null)
@@ -63,9 +63,11 @@ public class Program
             return;
         }
 
+        data.ModificationCount++;
         string jsonObjectString;
+
         try {
-            jsonObjectString = CreateJsonObjectString(input, ++modificationCount);
+            jsonObjectString = JsonSerializer.Serialize(new { data.ModificationCount, PreviousText = input });
         } catch (FormatException err) {
             Console.WriteLine($"{err.Message}, quitting...");
             return;

@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Globalization;
-using System.Numerics;
 
 namespace Json.Document;
 
