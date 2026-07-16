@@ -24,4 +24,4 @@ Tests Include:
 ### Json.TestProgram
 Run `dotnet run` on `Json.TestProgram` to run the console test program.
 
-Uses `JsonDocument` to parse JSON read from file, and to write JSON to file.
+Uses `JsonSerializer` and `JsonDeserializer` to deserialize JSON read from file, and to serialize JSON to write to file.
