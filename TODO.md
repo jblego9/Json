@@ -1,3 +1,3 @@
 # TODO
 - Serialization layer
-    - Deserialization
+    - Deserialization (arrays, objects)

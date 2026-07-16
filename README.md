@@ -10,7 +10,7 @@ Low-level tokenising and parsing. The `JsonLexer` turns raw JSON text into token
 Wraps the `Parsing` layer. The `JsonDocument` can both parse and write JSON. Parsing takes in raw JSON text and returns a `JsonValue` tree. Writing takes in a manually created `JsonValue` tree and returns raw JSON text.
 
 ### Serialization Layer
-Serialization available through the `JsonSerializer`, supports a select few types, see `JsonSerializer` for supported types. Deserialization is not implemented yet.
+Serialization available through the `JsonSerializer`, supports a select few types, see `JsonSerializer` for supported types. Deserialization is partially implemented. Array and Object deserialization is not implemented yet.
 
 ## Testing
 
