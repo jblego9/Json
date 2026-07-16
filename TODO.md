@@ -1,4 +1,4 @@
 # TODO
 - Serialization layer
-    - Serialization
+    - Serialization (fields of structs, classes, records)
     - Deserialization
