@@ -14,6 +14,9 @@ public class Program
             HandleNoPreviousText();
     }
 
+    /// <summary>
+    /// Throws <see cref="FormatException"/> on failure.
+    /// </summary>
     private static string CreateJsonObjectString(string previousText, long modificationCount)
     {
         return JsonDocument.Write(
@@ -41,7 +44,13 @@ public class Program
                 return;
             }
 
-            string jsonObjectString = CreateJsonObjectString(input, 1);
+            string jsonObjectString;
+            try {
+                jsonObjectString = CreateJsonObjectString(input, 1);
+            } catch (FormatException err) {
+                Console.WriteLine($"{err.Message}, quitting...");
+                return;
+            }
 
             using StreamWriter sw = File.CreateText(dataFilepath);
             sw.Write(jsonObjectString);
@@ -63,7 +72,13 @@ public class Program
             return;
         }
 
-        string jsonObjectString = CreateJsonObjectString(input, ++modificationCount);
+            string jsonObjectString;
+            try {
+                jsonObjectString = CreateJsonObjectString(input, ++modificationCount);
+            } catch (FormatException err) {
+                Console.WriteLine($"{err.Message}, quitting...");
+                return;
+            }
 
         using StreamWriter sw = File.CreateText(dataFilepath);
         sw.Write(jsonObjectString);

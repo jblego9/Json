@@ -25,16 +25,16 @@ public abstract record JsonValue
     public sealed record JsonNumber(string Raw) : JsonValue
     {
         public double AsDouble() =>
-            TryGetDouble(out var value) ? value : throw new FormatException($"'{Raw}' is not a valid double.");
+            TryGetDouble(out var value) ? value : throw new FormatException($"'{Raw}' is not a valid double");
 
         public decimal AsDecimal() =>
-            TryGetDecimal(out var value) ? value : throw new FormatException($"'{Raw}' is not a valid decimal.");
+            TryGetDecimal(out var value) ? value : throw new FormatException($"'{Raw}' is not a valid decimal");
 
         public int AsInt32() => 
-            TryGetInt32(out var value) ? value : throw new FormatException($"'{Raw}' is not a valid Int32.");
+            TryGetInt32(out var value) ? value : throw new FormatException($"'{Raw}' is not a valid Int32");
 
         public long AsInt64() =>
-            TryGetInt64(out var value) ? value : throw new FormatException($"'{Raw}' is not a valid Int64.");
+            TryGetInt64(out var value) ? value : throw new FormatException($"'{Raw}' is not a valid Int64");
 
         public bool TryGetDouble(out double value) => double.TryParse(Raw, CultureInfo.InvariantCulture, out value);
         public bool TryGetDecimal(out decimal value) => decimal.TryParse(Raw, NumberStyles.Float, CultureInfo.InvariantCulture, out value);

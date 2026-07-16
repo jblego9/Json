@@ -8,13 +8,19 @@ namespace Json.Document;
 /// </summary>
 public static class JsonDocument
 {
+    /// <summary>
+    /// Throws <see cref="FormatException"/> on failure.
+    /// </summary>
     public static JsonValue Parse(string source) => JsonParser.Parse(JsonLexer.Tokenise(source));
 
+    /// <summary>
+    /// Throws <see cref="FormatException"/> on failure.
+    /// </summary>
     public static string Write(JsonValue json)
     {
         return json switch
         {
-            JsonValue.JsonString => $"\"{((JsonValue.JsonString)json).Value}\"",
+            JsonValue.JsonString => WriteString((JsonValue.JsonString)json),
             JsonValue.JsonNumber => ((JsonValue.JsonNumber)json).Raw,
             JsonValue.JsonBoolean => ((JsonValue.JsonBoolean)json).Value ? "true" : "false",
             JsonValue.JsonNull => "null",
@@ -22,6 +28,28 @@ public static class JsonDocument
             JsonValue.JsonObject => WriteObject((JsonValue.JsonObject)json),
             _ => throw new FormatException("Invalid JsonValue")
         };
+    }
+
+    private static string WriteString(JsonValue.JsonString jsonString)
+    {
+        string result = "\"";
+
+        for (int i = 0; i < jsonString.Value.Length; i++)
+        {
+            char c = jsonString.Value[i];
+            if (c == '"')
+            {
+                if (i - 1 < 0)
+                    throw new FormatException("Unescaped '\"' within string");
+
+                if (jsonString.Value[i - 1] != '\\')
+                    throw new FormatException("Unescaped '\"' within string");
+            }
+
+            result += c;
+        }
+
+        return result + "\"";
     }
 
     private static string WriteArray(JsonValue.JsonArray jsonArray)
