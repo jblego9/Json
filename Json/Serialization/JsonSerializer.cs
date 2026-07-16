@@ -16,6 +16,7 @@ namespace Json.Serialization;
 /// <item><see langword="null"/></item>
 /// <item><see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{TKey, TValue}"/> of <see cref="string"/> and <see cref="object"/>?</item>
 /// <item><see cref="System.Collections.IEnumerable"/></item>
+/// <item>Plain classes/structs/records with public fields/properties.
 /// </list>
 /// </summary>
 public class JsonSerializer

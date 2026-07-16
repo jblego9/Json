@@ -17,8 +17,9 @@ namespace Json.Serialization;
 /// <item><see cref="object"/> (type inferred from the JSON value)</item>
 /// <item>Arrays and <see cref="List{T}"/></item>
 /// <item><see cref="Dictionary{TKey, TValue}"/> of <see cref="string"/> and TValue</item>
-/// <item>Plain classes with public fields/properties</item>
+/// <item>Plain classes/structs with public fields/properties. Must have a parameterless constructor.</item>
 /// </list>
+/// </summary>
 public class JsonDeserializer
 {
     /// <summary>

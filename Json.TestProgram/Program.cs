@@ -11,7 +11,7 @@ public class Program
         public Data()
         {
             PreviousText = "";
-            ModificationCount = 0;
+            ModificationCount = 1;
         }
 
         public string PreviousText;
