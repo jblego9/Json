@@ -2,6 +2,11 @@ using Json.Document;
 
 namespace Json.Serialization;
 
+/// <summary>
+/// Turns C# value(s) into a JSON string.
+/// <para>Supported Types: <see cref="int"/>, <see cref="long"/>, <see cref="double"/>, <see cref="decimal"/>, <see cref="string"/>, <see cref="bool"/>, <see cref="null"/>, <see cref="IEnumerable{T}"/> of <see cref="KeyValuePair{TKey, TValue}"/> of <see cref="string"/> and <see cref="object?"/>, <see cref="System.Collections.IEnumerable"/></para>
+/// <para>Serializes all public fields and properties.</para>
+/// </summary>
 public class JsonSerializer
 {
     public static string Serialize(object? value) => JsonDocument.Write(SerializeValue(value));
@@ -10,20 +15,20 @@ public class JsonSerializer
     {
         return value switch
         {
-            int => new JsonValue.JsonNumber(((int)value).ToString()),
-            long => new JsonValue.JsonNumber(((long)value).ToString()),
-            double => new JsonValue.JsonNumber(((double)value).ToString()),
-            decimal => new JsonValue.JsonNumber(((decimal)value).ToString()),
-            string => new JsonValue.JsonString((string)value),
-            bool => new JsonValue.JsonBoolean((bool)value),
+            int actual => new JsonValue.JsonNumber(actual.ToString()),
+            long actual => new JsonValue.JsonNumber(actual.ToString()),
+            double actual => new JsonValue.JsonNumber(actual.ToString()),
+            decimal actual => new JsonValue.JsonNumber(actual.ToString()),
+            string actual => new JsonValue.JsonString(actual),
+            bool actual => new JsonValue.JsonBoolean(actual),
             null => new JsonValue.JsonNull(),
-            List<object?> => SerializeList((List<object?>)value),
-            List<KeyValuePair<string, object?>> => SerializeObject((List<KeyValuePair<string, object?>>)value),
+            IEnumerable<KeyValuePair<string, object?>> actual => SerializeObject(actual),
+            System.Collections.IEnumerable actual => SerializeList(actual),
             _ => SerializeObject(value)
         };
     }
 
-    private static JsonValue.JsonArray SerializeList(List<object?> value)
+    private static JsonValue.JsonArray SerializeList(System.Collections.IEnumerable value)
     {
         List<JsonValue> items = [];
 
@@ -33,16 +38,16 @@ public class JsonSerializer
         return new JsonValue.JsonArray([.. items]);
     }
 
-    private static JsonValue.JsonObject SerializeObject(List<KeyValuePair<string, object?>> value)
+    private static JsonValue.JsonObject SerializeObject(IEnumerable<KeyValuePair<string, object?>> value)
     {
         List<KeyValuePair<JsonValue.JsonString, JsonValue>> fields = [];
 
-        foreach (var field in value)
+        foreach (var pair in value)
         {
             fields.Add(
                 new(
-                    new JsonValue.JsonString(field.Key),
-                    SerializeValue(field.Value)
+                    new JsonValue.JsonString(pair.Key),
+                    SerializeValue(pair.Value)
                 )
             );
         }
@@ -52,6 +57,35 @@ public class JsonSerializer
 
     private static JsonValue.JsonObject SerializeObject(object value)
     {
-        throw new ArgumentException($"Unsupported Type: {value.GetType()}");
+        var valueType = value.GetType();
+        var valueFields = valueType.GetFields();
+        var valueProperties = valueType.GetProperties();
+
+        if (valueFields.Length == 0 && valueProperties.Length == 0)
+            throw new ArgumentException($"Unsupported Type: {value.GetType()}. Has no public fields or properties");
+
+        List<KeyValuePair<JsonValue.JsonString, JsonValue>> fields = [];
+
+        foreach (var valueField in valueFields)
+        {
+            fields.Add(
+                new(
+                    new JsonValue.JsonString(valueField.Name),
+                    SerializeValue(valueField.GetValue(value))
+                )
+            );
+        }
+
+        foreach (var valueProperty in valueProperties)
+        {
+            fields.Add(
+                new(
+                    new JsonValue.JsonString(valueProperty.Name),
+                    SerializeValue(valueProperty.GetValue(value))
+                )
+            );
+        }
+
+        return new JsonValue.JsonObject([.. fields]);
     }
 }

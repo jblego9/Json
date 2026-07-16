@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using Json.Serialization;
 
 namespace Json.Tests.IntegrationTests;
@@ -41,7 +42,49 @@ public sealed class SerializeTests
         };
         Assert.AreEqual(
             "{\"ammo\": 100, \"a\": true, \"b\": false, \"null\": null, \"int\": 100, \"d\": -2.5E+100, \"text\": \"hello\"}",
-            JsonSerializer.Serialize(dictionary.ToList())
+            JsonSerializer.Serialize(dictionary)
         );
+    }
+
+    private class Square(double sideLength)
+    {
+        public readonly double SideLength = sideLength;
+
+        public double Area() => SideLength * SideLength;
+    }
+
+    [TestMethod]
+    public void SerializeSquareObject()
+    {
+        var square = new Square(5);
+        Assert.AreEqual("{\"SideLength\": 5}", JsonSerializer.Serialize(square));
+    }
+
+    private record Product(string Name, decimal Price);
+
+    [TestMethod]
+    public void SerializeProductObjects()
+    {
+        List<Product> products = [
+            new Product("Apple", 2.25m),
+            new Product("Orange", 3.00m),
+            new Product("Grape", 0.20m)
+        ];
+        Assert.AreEqual("[{\"Name\": \"Apple\", \"Price\": 2.25}, {\"Name\": \"Orange\", \"Price\": 3.00}, {\"Name\": \"Grape\", \"Price\": 0.20}]", JsonSerializer.Serialize(products));
+    }
+
+    private struct SomeStruct(int publicNumber, int privateNumber)
+    {
+        public int PublicNumber = publicNumber;
+        private readonly int privateNumber = privateNumber;
+
+        public readonly int AddBothNumbers() => PublicNumber + privateNumber;
+    }
+
+    [TestMethod]
+    public void SerializeSomeStruct()
+    {
+        var value = new SomeStruct(5, 10);
+        Assert.AreEqual("{\"PublicNumber\": 5}", JsonSerializer.Serialize(value));
     }
 }
